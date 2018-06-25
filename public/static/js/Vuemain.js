@@ -1,6 +1,7 @@
 var vm = new Vue({
 	el:'#app',
 	data:{
+		version: "0.2.1",
 		isTestNet: true,
 		Ip: "ws://47.254.39.10:8766",
 		Net: "TestNet",
@@ -67,6 +68,7 @@ var vm = new Vue({
 		this.$nextTick(function(){
 			this.initWebSocket();		//连接websocket
 			this.tableFun();				//生成table
+			this.LogVersion();
 		})
 	},
 	watch: {
@@ -311,6 +313,9 @@ var vm = new Vue({
 				// 	_this.initWebSocket();
 				// 	_this.tableFun();
 				// }, 2000);
+			},
+			LogVersion: function () {
+				console.log("Version: " + this.version);
 			}
 	}
 })
