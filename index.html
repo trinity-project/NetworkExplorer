@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+			<title>Trinity Network Explorer For TNC</title>
+			<link rel="shortcut icon" href="favicon.ico">
+			<link href="public/static/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="public/static/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+	    <link href="public/static/css/animate.min.css" rel="stylesheet">
+	    <link rel="stylesheet" href="public/static/css/plugins/bootstrapValidator/bootstrapValidator.min.css"/>
+	    <link rel="stylesheet" href="public/static/css/style.min.css" />
+	    <style>
+	    	.back:hover{cursor: pointer;}
+	    	.fixed-table-toolbar .btn-group>.btn-group:last-child>.btn {
+			    border-top-right-radius: 0px;
+			    border-bottom-right-radius: 0px;
+				}
+				label{width:100px;}
+				.popup_de{
+					background-color:rgba(0,0,0,0.3);
+					width:100%;
+					height: 100%;
+					position:fixed;
+					z-index:999;
+					top:0;
+					left:0;
+					display:none;
+				}
+				.bbox{
+					display: -webkit-box;   /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+					display: -moz-box;      /* 老版本语法: Firefox (buggy) */
+					display: -ms-flexbox;   /* 混合版本语法: IE 10 */
+					display: -webkit-flex;  /* 新版本语法: Chrome 21+ */
+					display: -moz-flex;
+					display: flex;          /* 新版本语法: Opera 12.1, Firefox 22+ */
+				}
+				.bbox.xycenter{
+					-moz-box-pack: center; /*Firefox*/
+					-webkit-box-pack: center; /*Safari,Opera,Chrome*/
+					box-pack: center;
+					-moz-justify-content: center;
+					-webkit-justify-content: center;
+					justify-content: center;
+					-moz-box-align: center; /*Firefox*/
+					-webkit-box-align:center; /*Safari,Opera,Chrome*/
+					box-align: center;
+					-moz-align-items: center;
+					-webkit-align-items: center;
+					align-items:center;
+				}
+	    </style>
+	</head>
+	<body>
+		<div id="app">
+		<div class="panel panel-default">
+			<div class="panel-heading clearfloat">
+				<img src="public/static/img/logo.png" alt="">
+				<h1>Trinity Network Explorer For TNC ({{ Net }})</h1>
+				<span v-if="isTestNet" @click="ChangeNetFun()" style="margin: 8px;float: right;font-size: 17px;cursor: pointer;" class="label label-default">Switch to MainNet</span>
+				<span v-if="!isTestNet" @click="ChangeNetFun()" style="margin: 8px;float: right;font-size: 17px;cursor: pointer;" class="label label-default">Switch to TestNet</span>
+			</div>
+		</div>
+			<div class="tableBody">
+				<h1 @click="traverseNode()" style="display:none">111111</h1>
+				<h1 @click="ipapi()" style="display:none">222222</h1>
+				<!-- <p style="float: left;margin: 0 6%;line-height: 34px;margin-top: 10px;margin-bottom: 10px;">Trinity Test Network now has <span>{{ nodeNum }}</span> Nodes, <span>{{ peerNum }}</span> Channels, <span>{{ spvNum }}</span> SPV.</p> -->
+				<p style="float: left;margin: 0 6%;line-height: 34px;margin-top: 10px;margin-bottom: 10px;">Trinity {{ Net }} now has <span>{{ nodeNum }}</span> Nodes, <span>{{ peerNum }}</span> Channels.</p>
+				<table id="mytab" class="table table-hover"></table>
+				<!-- <div id="toolbar" class="btn-group pull-right" style="margin-right: 40px;">
+	        <button id="btn_add" type="button" class="btn btn-default" style="border-top-left-radius: 0;border-bottom-left-radius: 0;border-left: 0;">
+	            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+	        </button>
+			  </div> -->
+			</div>
+        <div class="InfoBody">
+        		<div class="ibox float-e-margins">
+        			<div class="ibox-title">
+								<button type="button" class="btn btn-default" @click="closeFun()">Back</button>
+                <h2 @click="toggleForm()">Channel Information<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true" style="font-size: 14px;margin: 10px;"></span></h2>
+              </div>
+              <div class="ibox-content">
+                <form id="InfoForm" class="form-horizontal">
+                    <div class="form-group">
+												<div>
+	                        <label class="col-sm-5 control-label">IP:</label>
+	                        <div class="col-sm-7">
+	                            <p class="infoP">{{ rowData.ip }}&nbsp;</p>
+	                        </div>
+												</div>
+												<div>
+													<label class="col-sm-5 control-label">Node Name:</label>
+													<div class="col-sm-7">
+															<p class="infoP">{{ rowData.NodeName }}&nbsp;</p>
+													</div>
+												</div>
+												<div>
+													<label class="col-sm-5 control-label">Node ID:</label>
+													<div class="col-sm-7">
+															<p class="infoP">{{ rowData.NodeID }}&nbsp;</p>
+													</div>
+												</div>
+												<div>
+													<label class="col-sm-5 control-label">Fee:</label>
+													<div class="col-sm-7">
+															<p class="infoP">{{ rowData.fee }}&nbsp;</p>
+													</div>
+												</div>
+												<div>
+													<label class="col-sm-5 control-label">Peers Num:</label>
+													<div class="col-sm-7">
+															<p class="infoP">{{ rowData.peer }}&nbsp;</p>
+													</div>
+												</div>
+												<div>
+													<label class="col-sm-5 control-label">SPV Num:</label>
+													<div class="col-sm-7">
+															<p class="infoP">{{ rowData.spv }}&nbsp;</p>
+													</div>
+												</div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+									</form>
+									<form id="peerForm" class="form-horizontal" style="height: 300px;">
+										<h2>Peers</h2>
+										<table class="table table-hover table-striped">
+											<thead>
+												<tr>
+													<th>No</th>
+													<th>IP</th>
+													<th>Node Name</th>
+													<th>TNAP (Trinity Network Access Point)</th>
+													<th>Fee</th>
+													<th>Channel Num</th>
+													<th>SPV Num</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td> </td>
+													<td> </td>
+													<td> </td>
+													<td> </td>
+													<td> </td>
+													<td> </td>
+													<td> </td>
+												</tr>
+												<!-- <tr>
+													<td>2</td>
+													<td>Debbie</td>
+													<td>2</td>
+													<td>Debbie</td>
+													<td>2</td>
+													<td>Debbie</td>
+													<td>2</td>
+												</tr>
+												<tr>
+													<td>3</td>
+													<td>John</td>
+													<td>3</td>
+													<td>John</td>
+													<td>3</td>
+													<td>John</td>
+													<td>3</td>
+												</tr> -->
+											</tbody>
+										</table>
+                    <div class="hr-line-dashed"></div>
+                </form>
+								<form id="SPVForm" class="form-horizontal">
+									<h2>SPV</h2>
+									<table class="table table-hover table-striped">
+										<thead>
+											<tr>
+												<th>No</th>
+												<th>Address</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td></td>
+												<td></td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="hr-line-dashed"></div>
+							</form>
+             </div>
+          </div>
+		    </div>
+		 </div>
+	 </div>
+	</body>
+    <script src="public/static/js/jquery.min.js"></script>
+    <script src="public/static/js/bootstrap.min.js"></script>
+    <script src="public/static/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <!-- <script src="public/static/js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script> -->
+    <script src="public/static/js/plugins/bootstrapValidator/bootstrapValidator.min.js"></script>
+		<script src="public/static/js/vue.min.js"></script>
+		<script src="public/static/js/vue-websocket.js"></script>
+    <script src="public/static/js/main.js"></script>
+		<script src="public/static/js/Vuemain.js"></script>
+</html>
