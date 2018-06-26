@@ -62,7 +62,7 @@ h3{
 }
 .ChannelInfoBox{
 	width: 100%;
-	height: calc(50% - 55px);
+	height: calc(60% - 100px);
 	padding: 15px;
 	color: #FFFFFF;
 	word-break:break-all;
@@ -73,16 +73,21 @@ h3{
 } */
 .NodeInfoBox{
 	width: 100%;
-	height: calc(50% - 55px);
+	height: calc(60% - 100px);
 	color: #FFFFFF;
 	word-break:break-all;
 	/* background: green; */
 	padding: 15px;
 	display: none;
 }
-.ListBox{
-	width: 100%;
-	height: calc(50% - 55px);
-	background: blue;
-	display: none;
+.TipsBox {
+	width: 300px;
+    height: 40px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+.TipsBox p{
+	font-size: 20px;
+	color: #FFFFFF;
 }

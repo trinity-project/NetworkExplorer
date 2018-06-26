@@ -13,7 +13,7 @@
 	    <div class="LeftBox">
 				<div style="text-align: center;">
 					<h1>Trinity Network Explorer <br>For TNC</h1>
-					<span style="font-size: 16px;" class="label label-default NetSpan">Switch to MainNet</span>
+					<span style="font-size: 16px;cursor: pointer;" class="label label-default NetSpan">Switch to MainNet</span>
 				</div>
 				<div class="SummaryBox">
 					<h3 class="Net">Trinity TestNet</h3>
@@ -56,10 +56,19 @@
 						<label>Status:</label><p id="NodeStatusP"></p>
 					</div>
 				</div>
-				<div class="ListBox"></div>
 	    </div>
 	    <div class="RightBox">
-	      <div id="container"></div>
+		  <div id="container"></div>
+		  <div class="TipsBox">
+			<div style="display: inline-block;width:50px;border-bottom:4px solid #00ff00;"></div>
+			<div style="display: inline-block;width:25%;">
+				<p>: Online</p>
+			</div>
+			<div style="display: inline-block;width:50px;border-bottom:4px solid #f00;"></div>
+			<div style="display: inline-block;width:25%;">
+				<p>: Offline</p>
+			</div>
+		  </div>
 	    </div>
 		</div>
 	</body>
