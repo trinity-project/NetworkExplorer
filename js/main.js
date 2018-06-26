@@ -1,3 +1,5 @@
+var version = "0.2.2";
+
 var isTestNet = false;
 var Listdata;
 var nodes;
@@ -281,4 +283,5 @@ $(".NetSpan").click(function(){
 
 $(function () {
   WebSocketFun();
+  console.log("Version: " + this.version);
 });
