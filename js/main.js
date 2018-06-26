@@ -1,10 +1,22 @@
 var version = "0.1.1";
 
-var isTestNet = false;
+var isTestNet;
 var Listdata;
 var nodes;
 var links;
-var ip = "ws://47.98.228.81:8766";
+var ws;
+var ip;
+localStorage.getItem("wsIp") === "" ? ip = "ws://47.98.228.81:8766" : ip = localStorage.getItem("wsIp");
+if (ip === "ws://47.98.228.81:8766"){
+  isTestNet = false;
+  $(".NetSpan").text("Switch to MainNet");
+  $(".Net").text("Trinity TestNet");
+} else {
+  isTestNet = true;
+  $(".NetSpan").text("Switch to TestNet");
+  $(".Net").text("Trinity MainNet");
+}
+console.log(ip);
 function WebSocketFun()
 {
    if ("WebSocket" in window)
@@ -12,7 +24,7 @@ function WebSocketFun()
       //console.log("您的浏览器支持 WebSocket!");
 
       // 打开一个 web socket
-      var ws = new WebSocket(ip);
+      ws = new WebSocket(ip);
 
       ws.onopen = function()
       {
@@ -273,15 +285,15 @@ $(".NetSpan").click(function(){
   console.log(isTestNet);
   isTestNet === true ? isTestNet = false : isTestNet = true;
   if (isTestNet){
-    $(".NetSpan").text("Switch to TestNet");
-    $(".Net").text("Trinity MainNet");
+    localStorage.setItem('wsIp', 'ws://39.105.117.43:8766');
+    window.location.reload();
   } else {
-    $(".NetSpan").text("Switch to MainNet");
-    $(".Net").text("Trinity TestNet");
+    localStorage.setItem('wsIp', 'ws://47.98.228.81:8766');
+    window.location.reload();
   }
 })
 
 $(function () {
   WebSocketFun();
-  console.log("Version: " + this.version);
+  console.log("Version: " + version);
 });
