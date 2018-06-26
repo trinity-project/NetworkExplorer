@@ -1,4 +1,4 @@
-var version = "0.2.2";
+var version = "0.1.1";
 
 var isTestNet = false;
 var Listdata;
