@@ -6,7 +6,7 @@ var nodes;
 var links;
 var ws;
 var ip;
-localStorage.getItem("wsIp") === "" ? ip = "ws://47.98.228.81:8766" : ip = localStorage.getItem("wsIp");
+localStorage.getItem("wsIp") === null ? ip = "ws://47.98.228.81:8766" : ip = localStorage.getItem("wsIp");
 if (ip === "ws://47.98.228.81:8766"){
   isTestNet = false;
   $(".NetSpan").text("Switch to MainNet");
